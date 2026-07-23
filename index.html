@@ -1,690 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>Динамическая аналемма</title>
-<style>
-:root {
-    color-scheme: dark;
-}
-html {
-    zoom: 0.33;
-}
-body {
-    font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    font-weight: 400;
-    padding: 40px 20px;
-    background-color: #0b1215;
-    color: #cacac7;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-svg#view-canvas {
-    display: block;
-    width: 1170px;
-    height: 1170px;
-    margin-bottom: 310px;
-}
-.ui-wrapper {
-    width: 2300px;
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 50px;
-}
-.buttons-layer {
-    display: flex;
-    flex-direction: row;
-    gap: 100px;
-    width: 100%;
-}
-.custom-btn {
-    width: 700px;
-    height: 35px;
-    position: relative;
-    font-size: 50px;
-    line-height: 35px;
-    color: #cacac7;
-    text-transform: uppercase;
-    text-align: left;
-    white-space: nowrap;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: pointer;
-    background: transparent;
-    border: none;
-    padding: 0;
-}
-.hidden-date-input {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-    border: none;
-    box-sizing: border-box;
-}
-.hidden-date-input::-webkit-calendar-picker-indicator {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
-}
-.sliders-layer {
-    margin-top: 140px;
-    display: flex;
-    flex-direction: column;
-    gap: 90px;
-    width: 100%;
-}
-.slider-row {
-    display: flex;
-    flex-direction: row;
-    gap: 100px;
-    width: 100%;
-}
-.slider-control {
-    width: 1500px;
-    height: 35px;
-    position: relative;
-}
-.slider-text {
-    position: absolute;
-    top: 0; left: 0;
-    font-size: 50px;
-    line-height: 35px;
-    color: #cacac7;
-    text-transform: uppercase;
-    pointer-events: none;
-    white-space: nowrap;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
-.slider-control input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    background: transparent;
-    cursor: ew-resize;
-    position: absolute;
-    top: 0; left: 0;
-    z-index: 2;
-    touch-action: pan-y;
-    outline: none;
-}
-.slider-control input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    appearance: none;
-    height: 40px;
-    width: 40px;
-    background: transparent;
-    border: none;
-}
-.slider-control input[type="range"]::-moz-range-thumb {
-    height: 40px;
-    width: 40px;
-    background: transparent;
-    border: none;
-}
-.slider-value {
-    width: 700px;
-    height: 35px;
-    font-size: 50px;
-    line-height: 35px;
-    color: #cacac7;
-    text-transform: uppercase;
-    text-align: left;
-    user-select: none;
-    -webkit-user-select: none;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>analemma_calculator</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
 </head>
 <body>
+    
+  <img src="img/angels.svg" alt="Angels" class="angels-img">
 
-<svg id="view-canvas" viewBox="0 0 1800 1800" xmlns="http://www.w3.org/2000/svg">
-    <defs>
+  <div class="map-wrapper">
+    <img src="img/Запад.svg" alt="Запад" class="compass-img compass-west">
+    <img src="img/Север.svg" alt="Север" class="compass-img compass-north">
+    <img src="img/Восток.svg" alt="Восток" class="compass-img compass-east">
+    <img src="img/Юг.svg" alt="Юг" class="compass-img compass-south">
+    
+    <svg id="view-canvas" viewBox="0 0 1800 1800" xmlns="http://www.w3.org/2000/svg">
+      <defs>
         <clipPath id="grid-clip">
-            <circle cx="900" cy="900" r="891" />
+          <circle cx="900" cy="900" r="891" />
         </clipPath>
-    </defs>
-    
-    <g id="grid-layer" clip-path="url(#grid-clip)"></g>
-    
-    <g id="dynamic-layer">
+      </defs>
+      
+      <g id="grid-layer" clip-path="url(#grid-clip)"></g>
+      
+      <g id="dynamic-layer">
         <path id="curves-path" fill="none" stroke="#CACAC7" stroke-width="1.5" />
         <g id="suns-layer"></g>
-    </g>
-</svg>
+      </g>
+    </svg>
+  </div>
 
-<div class="ui-wrapper">
+  <div class="ui-wrapper">
     <div class="buttons-layer">
-        <div class="custom-btn">
-            <span id="startDisplay">НАЧАЛО</span>
-            <input id="startDate" type="date" value="" class="hidden-date-input" onclick="if(this.showPicker) this.showPicker()">
-        </div>
-        
-        <div class="custom-btn">
-            <span id="endDisplay">КОНЕЦ</span>
-            <input id="endDate" type="date" value="" class="hidden-date-input" onclick="if(this.showPicker) this.showPicker()">
-        </div>
-        
-        <div class="custom-btn" id="projBtn">
-            <span id="projDisplay">ПОЛЯРНАЯ СЕТКА</span>
-            <input type="hidden" id="projection" value="polar">
-        </div>
+      <div class="custom-btn">
+        <span id="startDisplay">НАЧАЛО</span>
+        <input id="startDate" type="date" value="" class="hidden-date-input">
+      </div>
+      
+      <div class="custom-btn">
+        <span id="endDisplay">КОНЕЦ</span>
+        <input id="endDate" type="date" value="" class="hidden-date-input">
+      </div>
+      
+      <div class="custom-btn" id="projBtn">
+        <span id="projDisplay">ЭКВАТОРИАЛЬНАЯ СЕТКА</span>
+        <input type="hidden" id="projection" value="equatorial">
+      </div>
     </div>
+
     <div class="sliders-layer">
-        <div class="slider-row">
-            <div class="slider-control">
-                <span class="slider-text" id="textLat">ШИРОТА</span>
-                <input id="lat" type="range" min="-90" max="90" step="0.0001" value="55.75">
-            </div>
-            <div class="slider-value" id="latVal">55.75</div>
+      <div class="slider-row">
+        <div class="slider-control">
+          <span class="slider-text" id="textLat">ШИРОТА</span>
+          <input id="lat" type="range" min="-90" max="90" step="0.0001" value="-90">
         </div>
-        <div class="slider-row">
-            <div class="slider-control">
-                <span class="slider-text" id="textLon">ДОЛГОТА</span>
-                <input id="lon" type="range" min="-180" max="180" step="0.0001" value="37.62">
-            </div>
-            <div class="slider-value" id="lonVal">37.62</div>
+        <div class="slider-value" id="latVal">-90</div>
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-control">
+          <span class="slider-text" id="textLon">ДОЛГОТА</span>
+          <input id="lon" type="range" min="-180" max="180" step="0.0001" value="-180">
         </div>
-        <div class="slider-row">
-            <div class="slider-control">
-                <span class="slider-text" id="textStep">ШАГ СВЕТИЛ</span>
-                <input id="step" type="range" min="0" max="1" step="0.001" value="0.5">
-            </div>
-            <div class="slider-value" id="stepVal"></div>
+        <div class="slider-value" id="lonVal">-180</div>
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-control">
+          <span class="slider-text" id="textStep">ШАГ СВЕТИЛ</span>
+          <input id="step" type="range" min="0" max="1" step="0.001" value="0">
         </div>
-        <div class="slider-row">
-            <div class="slider-control">
-                <span class="slider-text" id="textInterval">ИНТЕРВАЛ</span>
-                <input id="intervalInput" type="range" min="0.08" max="1" step="0.001" value="0.5">
-            </div>
-            <div class="slider-value" id="intervalVal"></div>
+        <div class="slider-value" id="stepVal"></div>
+      </div>
+
+      <div class="slider-row">
+        <div class="slider-control">
+          <span class="slider-text" id="textInterval">ИНТЕРВАЛ</span>
+          <input id="intervalInput" type="range" min="0.08" max="1" step="0.001" value="0.08">
         </div>
+        <div class="slider-value" id="intervalVal"></div>
+      </div>
     </div>
-</div>
 
-<script>
-const SUN_COLOR = '#CACAC7';
-const GRID_COLOR = 'rgba(41, 70, 73, 1)';
-const CANVAS_CX = 900;
-const CANVAS_CY = 900;
+    <img src="img/portals.svg" alt="Portals" class="portals-img">
+  </div>
 
-const GRID_RADIUS = 890;
-const GRID_LINE_WIDTH = 2;
-
-const SUN_SIZE = 12;
-const SUN_OFFSET = 6;
-
-const svgCanvas = document.getElementById("view-canvas");
-const gridLayer = document.getElementById("grid-layer");
-const curvesPath = document.getElementById("curves-path");
-const sunsLayer = document.getElementById("suns-layer");
-
-let isDrawing = false;
-let needsRedraw = false;
-let solarCache = [];
-let lastStableLon = 37.62;
-let visualRotationOffset = 0;
-
-let globalLatRad = deg(55.75);
-let globalPointStep = 130;
-
-function formatDateToDDMMYYYY(ymdStr) {
-    if (!ymdStr) return "";
-    const parts = ymdStr.split('-');
-    if (parts.length !== 3) return ymdStr;
-    return `${parts[2]}-${parts[1]}-${parts[0]}`;
-}
-
-function formatDays(count) {
-    const rem10 = count % 10;
-    const rem100 = count % 100;
-    if (rem100 >= 11 && rem100 <= 14) return `${count} ДНЕЙ`;
-    if (rem10 === 1) return `${count} ДЕНЬ`;
-    if (rem10 >= 2 && rem10 <= 4) return `${count} ДНЯ`;
-    return `${count} ДНЕЙ`;
-}
-
-function stepToRealValue(normalized) {
-    const min = 1;
-    const max = 365;
-    return Math.round(min + (max - min) * Math.pow(normalized, 1.5));
-}
-
-function stepToNormalized(realValue) {
-    const min = 1;
-    const max = 365;
-    return Math.pow((realValue - min) / (max - min), 1 / 1.5);
-}
-
-function intervalToRealValue(normalized) {
-    const min = 1;
-    const max = 1440;
-    return Math.round(min + (max - min) * Math.pow(normalized, 2));
-}
-
-function intervalToNormalized(realValue) {
-    const min = 1;
-    const max = 1440;
-    return Math.pow((realValue - min) / (max - min), 1 / 2);
-}
-
-const possibleIntervals = [
-    1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20,
-    24, 30, 32, 36, 40, 45, 48, 60, 72, 80, 90, 96,
-    120, 144, 160, 180, 240, 288, 360, 480, 720, 1440
-];
-
-const nearestCache = new Map();
-for (let i = 1; i <= 1440; i++) {
-    const nearest = possibleIntervals.reduce((prev, curr) =>
-        Math.abs(curr - i) < Math.abs(prev - i) ? curr : prev
-    );
-    nearestCache.set(i, nearest);
-}
-
-function updateIntervalLabel(intervalMins) {
-    const count = Math.floor(1440 / intervalMins);
-    document.getElementById("intervalVal").textContent = `${intervalMins} МИН (${count}/СУТКИ)`;
-}
-
-function deg(v) { return v * Math.PI / 180; }
-function rad(v) { return v * 180 / Math.PI; }
-
-function getSolarEcliptic(date) {
-    const JD = date.getTime() / 86400000 + 2440587.5;
-    const T = (JD - 2451545) / 36525;
-    let L0 = (280.46646 + 36000.76983 * T) % 360;
-    const M = 357.52911 + 35999.05029 * T;
-    const C = Math.sin(deg(M)) * 1.914602 + Math.sin(deg(2 * M)) * 0.019993;
-    const lambda = L0 + C;
-    const eps = 23.439291;
-    
-    const ra = rad(Math.atan2(
-        Math.cos(deg(eps)) * Math.sin(deg(lambda)),
-        Math.cos(deg(lambda))
-    ));
-    const dec = rad(Math.asin(
-        Math.sin(deg(eps)) * Math.sin(deg(lambda))
-    ));
-    const gst = 280.46061837 + 360.98564736629 * (JD - 2451545);
-    
-    return { ra, dec, gst };
-}
-
-function HDecToHorizontal(H, dec, latr) {
-    const Hr = deg(H);
-    const decr = deg(dec);
-    const sinDec = Math.sin(decr);
-    const cosDec = Math.cos(decr);
-    const sinLat = Math.sin(latr);
-    const cosLat = Math.cos(latr);
-    
-    const alt = Math.asin(sinLat * sinDec + cosLat * cosDec * Math.cos(Hr));
-    const az = Math.atan2(
-        Math.sin(Hr) * cosDec,
-        Math.cos(Hr) * sinLat * cosDec - sinDec * cosLat
-    );
-    
-    return {
-        altitude: rad(alt),
-        azimuth: (rad(az) + 540) % 360
-    };
-}
-
-function project(az, alt, projType) {
-    const zenith = 90 - alt;
-    let rho = (projType === "ortho") ? GRID_RADIUS * Math.sin(deg(zenith)) : GRID_RADIUS * (zenith / 90);
-    return {
-        x: CANVAS_CX + rho * Math.sin(deg(az)),
-        y: CANVAS_CY - rho * Math.cos(deg(az))
-    };
-}
-
-function updateSolarCache() {
-    solarCache = [];
-    const startVal = document.getElementById("startDate").value;
-    const endVal = document.getElementById("endDate").value;
-    
-    const intervalNormalized = parseFloat(document.getElementById("intervalInput").value);
-    const intervalRaw = intervalToRealValue(intervalNormalized);
-    const interval = nearestCache.get(intervalRaw);
-    
-    updateIntervalLabel(interval);
-    
-    if (!startVal || !endVal || interval < 1) return;
-    
-    const startParts = startVal.split('-');
-    const endParts = endVal.split('-');
-    if (startParts.length !== 3 || endParts.length !== 3) return;
-    
-    const startUTC = Date.UTC(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
-    const endUTC = Date.UTC(parseInt(endParts[0]), parseInt(endParts[1]) - 1, parseInt(endParts[2]));
-    
-    if (isNaN(startUTC) || isNaN(endUTC) || startUTC > endUTC) return;
-    
-    // РЕШЕНИЕ ЗАДАЧИ 2: Смещение долготы возвращено в расчет временно́й шкалы кэша
-    const lon = parseFloat(document.getElementById("lon").value);
-    const longitudeOffsetMs = lon * 4 * 60 * 1000; // 4 минуты на 1 градус долготы
-    
-    const d = new Date();
-    
-    for(let m = 0; m < 1440; m += interval) {
-        const dayPoints = [];
-        let currentDayLocalUTC = startUTC; // Интерпретируем даты как местное время
-        
-        while(currentDayLocalUTC <= endUTC) {
-            // Переводим местное гражданское время «m» минут в истинное UTC для астрономического ядра
-            const targetUTCMs = currentDayLocalUTC - longitudeOffsetMs + (m * 60 * 1000);
-            
-            d.setTime(targetUTCMs);
-            dayPoints.push(getSolarEcliptic(d));
-            currentDayLocalUTC += 86400000;
-        }
-        solarCache.push(dayPoints);
-    }
-}
-
-function drawGrid() {
-    const projType = document.getElementById("projection").value;
-    let markup = '';
-    
-    if (projType === "equatorial") {
-        let gridPathsD = '';
-        const traceLine = (getCoords) => {
-            let d = '';
-            let active = false;
-            for (let i = 0; i <= 360; i += 0.5) {
-                const coords = getCoords(i);
-                if (coords.altitude >= -1.0) {
-                    const pt = project(coords.azimuth, coords.altitude, "polar");
-                    if (!active) {
-                        d += `M ${pt.x.toFixed(1)} ${pt.y.toFixed(1)} `;
-                        active = true;
-                    } else {
-                        d += `L ${pt.x.toFixed(1)} ${pt.y.toFixed(1)} `;
-                    }
-                } else {
-                    active = false;
-                }
-            }
-            return d;
-        };
-        
-        for (let decDeg = -75; decDeg <= 75; decDeg += 15) {
-            gridPathsD += traceLine((i) => HDecToHorizontal(i - 180, decDeg, globalLatRad));
-        }
-        for (let hHour = 0; hHour < 360; hHour += 15) {
-            gridPathsD += traceLine((i) => HDecToHorizontal(hHour, (i / 2) - 90, globalLatRad));
-        }
-        markup += `<path d="${gridPathsD}" fill="none" stroke="${GRID_COLOR}" stroke-width="${GRID_LINE_WIDTH}" />`;
-    } else {
-        for(let az = 0; az < 360; az += 15){
-            let x2 = CANVAS_CX + GRID_RADIUS * Math.sin(deg(az));
-            let y2 = CANVAS_CY - GRID_RADIUS * Math.cos(deg(az));
-            markup += `<line x1="${CANVAS_CX}" y1="${CANVAS_CY}" x2="${x2}" y2="${y2}" stroke="${GRID_COLOR}" stroke-width="${GRID_LINE_WIDTH}" />`;
-        }
-        for(let alt = 10; alt < 90; alt += 10){
-            let r = (projType === "polar") ? GRID_RADIUS * ((90 - alt) / 90) : GRID_RADIUS * Math.sin(deg(90 - alt));
-            markup += `<circle cx="${CANVAS_CX}" cy="${CANVAS_CY}" r="${r}" fill="none" stroke="${GRID_COLOR}" stroke-width="${GRID_LINE_WIDTH}" />`;
-        }
-    }
-    markup += `<circle cx="${CANVAS_CX}" cy="${CANVAS_CY}" r="${GRID_RADIUS}" fill="none" stroke="${GRID_COLOR}" stroke-width="${GRID_LINE_WIDTH}" />`;
-    gridLayer.innerHTML = markup;
-}
-
-function drawAnalemmas() {
-    const projType = document.getElementById("projection").value;
-    const lon = parseFloat(document.getElementById("lon").value);
-    
-    document.getElementById("stepVal").textContent = formatDays(globalPointStep);
-    
-    if (solarCache.length === 0) {
-        curvesPath.setAttribute('d', '');
-        sunsLayer.innerHTML = '';
-        return;
-    }
-    
-    let combinedD = '';
-    const sunsPaths = [];
-    
-    for(let c = 0; c < solarCache.length; c++) {
-        const dayPoints = solarCache[c];
-        const subCurves = [];
-        let currentSubCurve = [];
-        
-        for(let i = 0; i < dayPoints.length; i++) {
-            const solarData = dayPoints[i];
-            
-            const H = ((solarData.gst + (lon + visualRotationOffset) - solarData.ra + 540) % 360) - 180;
-            const pos = HDecToHorizontal(H, solarData.dec, globalLatRad);
-            
-            if(pos.altitude > -90){ // Разрешаем расчет точек под горизонтом для полночных аналемм
-                const pt = project(pos.azimuth, pos.altitude, projType);
-                
-                if (pos.altitude > 0) {
-                    currentSubCurve.push(pt);
-                } else {
-                    if (currentSubCurve.length > 0) {
-                        subCurves.push(currentSubCurve);
-                        currentSubCurve = [];
-                    }
-                }
-                
-                if (pos.altitude > 0 && i % globalPointStep === 0) {
-                    sunsPaths.push(`M ${(pt.x - SUN_OFFSET).toFixed(1)} ${(pt.y - SUN_OFFSET).toFixed(1)} h ${SUN_SIZE} v ${SUN_SIZE} h -${SUN_SIZE} z`);
-                }
-            }
-        }
-        if (currentSubCurve.length > 0) subCurves.push(currentSubCurve);
-        
-        for (const curve of subCurves) {
-            if (curve.length > 1) {
-                combinedD += `M ${curve[0].x.toFixed(1)} ${curve[0].y.toFixed(1)} `;
-                for(let i = 1; i < curve.length - 1; i++){
-                    const xc = (curve[i].x + curve[i+1].x) / 2;
-                    const yc = (curve[i].y + curve[i+1].y) / 2;
-                    combinedD += `Q ${curve[i].x.toFixed(1)} ${curve[i].y.toFixed(1)} ${xc.toFixed(1)} ${yc.toFixed(1)} `;
-                }
-                const last = curve.length - 1;
-                combinedD += `Q ${curve[last-1].x.toFixed(1)} ${curve[last-1].y.toFixed(1)} ${curve[last].x.toFixed(1)} ${curve[last].y.toFixed(1)} `;
-            }
-        }
-    }
-    
-    curvesPath.setAttribute('d', combinedD);
-    sunsLayer.innerHTML = sunsPaths.length ? `<path d="${sunsPaths.join(' ')}" fill="${SUN_COLOR}" />` : '';
-}
-
-function scheduleRedraw() {
-    if (!isDrawing) {
-        isDrawing = true;
-        requestAnimationFrame(() => {
-            drawAnalemmas();
-            isDrawing = false;
-            if (needsRedraw) {
-                needsRedraw = false;
-                scheduleRedraw();
-            }
-        });
-    } else {
-        needsRedraw = true;
-    }
-}
-
-document.getElementById('startDate').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('startDisplay').textContent = val ? formatDateToDDMMYYYY(val) : "НАЧАЛО";
-    updateSolarCache();
-    scheduleRedraw();
-});
-
-document.getElementById('endDate').addEventListener('change', (e) => {
-    const val = e.target.value;
-    document.getElementById('endDisplay').textContent = val ? formatDateToDDMMYYYY(val) : "КОНЕЦ";
-    updateSolarCache();
-    scheduleRedraw();
-});
-
-const projBtn = document.getElementById('projBtn');
-const projInput = document.getElementById('projection');
-const projDisplay = document.getElementById('projDisplay');
-
-projBtn.addEventListener('click', () => {
-    if (projInput.value === "polar") {
-        projInput.value = "ortho";
-        projDisplay.textContent = "ОРТОГОНАЛЬНАЯ СЕТКА";
-    } else if (projInput.value === "ortho") {
-        projInput.value = "equatorial";
-        projDisplay.textContent = "ЭКВАТОРИАЛЬНАЯ СЕТКА";
-    } else {
-        projInput.value = "polar";
-        projDisplay.textContent = "ПОЛЯРНАЯ СЕТКА";
-    }
-    
-    drawGrid();
-    scheduleRedraw();
-});
-
-function updateSliderTextPosition(inputId, textId) {
-    const input = document.getElementById(inputId);
-    const textSpan = document.getElementById(textId);
-    const min = parseFloat(input.min);
-    const max = parseFloat(input.max);
-    const val = parseFloat(input.value);
-    
-    const percent = ((val - min) / (max - min)) * 100;
-    textSpan.style.left = `${percent}%`;
-    textSpan.style.transform = `translateX(-${percent}%)`;
-}
-
-const sliderMap = {
-    "lat": "textLat",
-    "lon": "textLon",
-    "step": "textStep",
-    "intervalInput": "textInterval"
-};
-
-const rangeInputs = document.querySelectorAll('input[type="range"]');
-rangeInputs.forEach(input => {
-    input.addEventListener("input", (e) => {
-        const target = e.target;
-        updateSliderTextPosition(target.id, sliderMap[target.id]);
-        
-        if (target.id === "lat") {
-            document.getElementById("latVal").textContent = target.value;
-            globalLatRad = deg(parseFloat(target.value)); 
-            if (document.getElementById("projection").value === "equatorial") {
-                drawGrid();
-            }
-        }
-        else if (target.id === "lon") {
-            document.getElementById("lonVal").textContent = target.value;
-            const currentLon = parseFloat(target.value);
-            visualRotationOffset = currentLon - lastStableLon;
-        }
-        else if (target.id === "step") {
-            globalPointStep = stepToRealValue(parseFloat(target.value));
-        }
-        
-        if (target.id === "intervalInput" || target.id === "lon") {
-            updateSolarCache();
-        }
-        
-        scheduleRedraw();
-    });
-});
-
-const lonInput = document.getElementById("lon");
-let animeFrameId = null;
-
-lonInput.addEventListener("change", () => {
-    if (animeFrameId) cancelAnimationFrame(animeFrameId);
-    
-    const startOffset = visualRotationOffset;
-    const startTime = performance.now();
-    const duration = 800;
-    
-    function animate(now) {
-        const elapsed = now - startTime;
-        const progress = Math.min(elapsed / duration, 1);
-        
-        const ease = 1 - Math.pow(1 - progress, 4);
-        visualRotationOffset = startOffset * (1 - ease);
-        
-        scheduleRedraw();
-        
-        if (progress < 1) {
-            animeFrameId = requestAnimationFrame(animate);
-        } else {
-            visualRotationOffset = 0;
-            lastStableLon = parseFloat(lonInput.value);
-            updateSolarCache();
-            scheduleRedraw();
-        }
-    }
-    animeFrameId = requestAnimationFrame(animate);
-});
-
-window.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 's' || e.key.toLowerCase() === 'ы') {
-        const serializer = new XMLSerializer();
-        let source = serializer.serializeToString(svgCanvas);
-        if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-            source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-        }
-        const blob = new Blob([source], {type: "image/svg+xml;charset=utf-8"});
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.download = 'analemma.svg';
-        link.href = url;
-        link.click();
-        URL.revokeObjectURL(url);
-    }
-});
-
-function initAll() {
-    const initialStep = 130;
-    const stepSlider = document.getElementById("step");
-    stepSlider.value = stepToNormalized(initialStep);
-    globalPointStep = initialStep;
-    document.getElementById("stepVal").textContent = formatDays(initialStep);
-    
-    const initialIntervalRaw = 360;
-    const intervalSlider = document.getElementById("intervalInput");
-    intervalSlider.value = intervalToNormalized(initialIntervalRaw);
-    const initialInterval = nearestCache.get(initialIntervalRaw);
-    updateIntervalLabel(initialInterval);
-    
-    const startDate = document.getElementById('startDate').value;
-    document.getElementById('startDisplay').textContent = startDate ? formatDateToDDMMYYYY(startDate) : "НАЧАЛО";
-    const endDate = document.getElementById('endDate').value;
-    document.getElementById('endDisplay').textContent = endDate ? formatDateToDDMMYYYY(endDate) : "КОНЕЦ";
-        
-    for (const [inputId, textId] of Object.entries(sliderMap)) {
-        updateSliderTextPosition(inputId, textId);
-    }
-    
-    globalLatRad = deg(parseFloat(document.getElementById("lat").value));
-    lastStableLon = parseFloat(document.getElementById("lon").value);
-    visualRotationOffset = 0;
-    
-    updateSolarCache();
-    drawGrid();
-    drawAnalemmas();
-}
-
-initAll();
-</script>
 </body>
 </html>

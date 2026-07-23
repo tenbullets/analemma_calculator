@@ -1,0 +1,243 @@
+:root {
+  color-scheme: dark;
+  --bg-color: #0b1215;
+  --text-color: #cacac7;
+  --font-main: "SF Pro Regular", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+html {
+  zoom: 0.9;
+}
+
+body {
+  font-family: var(--font-main);
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  padding: 40px 20px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+body.loaded {
+  opacity: 1;
+}
+
+img {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+/* Map & Canvas Visuals */
+.angels-img {
+  width: 540px;
+  height: 286px;
+  display: block;
+  margin-bottom: -40px;
+  position: relative;
+  z-index: 2;
+}
+
+.map-wrapper {
+  position: relative;
+  width: 540px;
+  height: 280px;
+  margin-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+
+svg#view-canvas {
+  display: block;
+  width: 280px;
+  height: 280px;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Compass Overlay */
+.compass-img {
+  position: absolute;
+  width: 160px;
+  height: 39px;
+  z-index: 3;
+  display: block;
+}
+
+.compass-west {
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.compass-north {
+  height: 51px;
+  left: 190px;
+  top: -39px;
+}
+
+.compass-south {
+  left: 190px;
+  bottom: -19.5px;
+}
+
+.compass-east {
+  left: 380px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* UI Controls */
+.ui-wrapper {
+  width: 540px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.buttons-layer {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 540px;
+}
+
+.custom-btn {
+  width: 160px;
+  height: 24px;
+  position: relative;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+  color: var(--text-color);
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.hidden-date-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+  border: none;
+  box-sizing: border-box;
+}
+
+.hidden-date-input::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.sliders-layer {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  width: 540px;
+}
+
+.portals-img {
+  width: 540px;
+  height: 103px;
+  display: block;
+  margin-top: 50px;
+}
+
+.slider-row {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  width: 540px;
+}
+
+.slider-control {
+  width: 350px;
+  height: 24px;
+  position: relative;
+}
+
+.slider-text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+  color: var(--text-color);
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.slider-control input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  background: transparent;
+  cursor: ew-resize;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.slider-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 24px;
+  width: 24px;
+  background: transparent;
+  border: none;
+}
+
+.slider-control input[type="range"]::-moz-range-thumb {
+  height: 24px;
+  width: 24px;
+  background: transparent;
+  border: none;
+}
+
+.slider-value {
+  width: 160px;
+  height: 24px;
+  font-size: 12px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+  color: var(--text-color);
+  text-transform: uppercase;
+  text-align: left;
+  user-select: none;
+  -webkit-user-select: none;
+}
