@@ -504,30 +504,31 @@ function bindEvents() {
   });
 
   // Range Sliders Input Handling
-  const rangeInputs = document.querySelectorAll('input[type="range"]');
+const rangeInputs = document.querySelectorAll('input[type="range"]');
   rangeInputs.forEach(input => {
     input.addEventListener('input', (e) => {
       const target = e.target;
       updateSliderTextPosition(target.id, SLIDER_MAP[target.id]);
-
+      
       if (target.id === 'lat') {
-        elements.latVal.textContent = target.value;
-        state.globalLatRad = deg(parseFloat(target.value));
+        const valNum = parseFloat(target.value);
+        setValueTextAndPosition('lat', 'latVal', valNum.toFixed(2));
+        state.globalLatRad = deg(valNum);
         if (elements.projInput.value === 'equatorial') {
           drawGrid();
         }
       } else if (target.id === 'lon') {
-        elements.lonVal.textContent = target.value;
-        const currentLon = parseFloat(target.value);
-        state.visualRotationOffset = currentLon - state.lastStableLon;
+        const valNum = parseFloat(target.value);
+        setValueTextAndPosition('lon', 'lonVal', valNum.toFixed(2));
+        state.visualRotationOffset = valNum - state.lastStableLon;
       } else if (target.id === 'step') {
         state.globalPointStep = stepToRealValue(parseFloat(target.value));
+        setValueTextAndPosition('step', 'stepVal', formatDays(state.globalPointStep));
       }
-
+      
       if (target.id === 'intervalInput' || target.id === 'lon') {
         updateSolarCache();
       }
-
       scheduleRedraw();
     });
   });
@@ -588,12 +589,18 @@ function initAll() {
   const initialStep = 1;
   elements.stepInput.value = stepToNormalized(initialStep);
   state.globalPointStep = initialStep;
-  elements.stepVal.textContent = formatDays(initialStep);
-
+  
   const initialIntervalRaw = 10;
   elements.intervalInput.value = intervalToNormalized(initialIntervalRaw);
   const initialInterval = nearestIntervalCache.get(initialIntervalRaw);
   updateIntervalLabel(initialInterval);
+
+  const initialLat = parseFloat(elements.latInput.value);
+  const initialLon = parseFloat(elements.lonInput.value);
+
+  setValueTextAndPosition('lat', 'latVal', initialLat.toFixed(2));
+  setValueTextAndPosition('lon', 'lonVal', initialLon.toFixed(2));
+  setValueTextAndPosition('step', 'stepVal', formatDays(initialStep));
 
   const startDate = elements.startDate.value;
   elements.startDisplay.textContent = startDate ? formatDateToDDMMYYYY(startDate) : 'НАЧАЛО';
