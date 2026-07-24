@@ -199,9 +199,62 @@ function intervalToNormalized(realValue) {
   return Math.pow((realValue - min) / (max - min), 0.5);
 }
 
+// --- Dynamic Value Positioning Logic ---
+function updateSliderValuePosition(inputId, valueId) {
+  const input = document.getElementById(inputId);
+  const valContainer = document.getElementById(valueId);
+  if (!input || !valContainer) return;
+
+  let span = valContainer.querySelector('span');
+  if (!span) {
+    span = document.createElement('span');
+    span.textContent = valContainer.textContent;
+    valContainer.innerHTML = '';
+    valContainer.appendChild(span);
+  }
+
+  const min = parseFloat(input.min);
+  const max = parseFloat(input.max);
+  const val = parseFloat(input.value);
+
+  // t: 0 at min value, 1 at max value
+  const t = (val - min) / (max - min);
+  const containerWidth = 144;
+  const textWidth = span.offsetWidth;
+
+  const maxShift = Math.max(0, containerWidth - textWidth);
+  // At min value (t=0) shift is maxShift (right aligned in 144px column)
+  // At max value (t=1) shift is 0 (left aligned in 144px column)
+  const shift = (1 - t) * maxShift;
+
+  span.style.transform = `translateX(${shift}px)`;
+}
+
+function setValueTextAndPosition(inputId, valueId, text) {
+  const valContainer = document.getElementById(valueId);
+  if (!valContainer) return;
+
+  let span = valContainer.querySelector('span');
+  if (!span) {
+    span = document.createElement('span');
+    valContainer.innerHTML = '';
+    valContainer.appendChild(span);
+  }
+  span.textContent = text;
+  updateSliderValuePosition(inputId, valueId);
+}
+
+function updateAllSliderValuePositions() {
+  updateSliderValuePosition('lat', 'latVal');
+  updateSliderValuePosition('lon', 'lonVal');
+  updateSliderValuePosition('step', 'stepVal');
+  updateSliderValuePosition('intervalInput', 'intervalVal');
+}
+
 function updateIntervalLabel(intervalMins) {
   const count = Math.floor(1440 / intervalMins);
-  elements.intervalVal.textContent = `${intervalMins} МИН (${count}/СУТКИ)`;
+  const text = `${intervalMins} МИН (${count}/СУТКИ)`;
+  setValueTextAndPosition('intervalInput', 'intervalVal', text);
 }
 
 function updateSliderTextPosition(inputId, textId) {
@@ -312,7 +365,7 @@ function drawAnalemmas() {
   const projType = elements.projInput.value;
   const lon = parseFloat(elements.lonInput.value);
 
-  elements.stepVal.textContent = formatDays(state.globalPointStep);
+  setValueTextAndPosition('step', 'stepVal', formatDays(state.globalPointStep));
 
   if (state.solarCache.length === 0) {
     elements.curvesPath.setAttribute('d', '');
@@ -507,6 +560,9 @@ function bindEvents() {
     state.animeFrameId = requestAnimationFrame(animate);
   });
 
+  // Window Resize handling
+  window.addEventListener('resize', updateAllSliderValuePositions);
+
   // Keybindings (Export SVG on 'S' key)
   window.addEventListener('keydown', (e) => {
     const key = e.key.toLowerCase();
@@ -571,6 +627,10 @@ async function revealPage() {
   });
 
   await Promise.all(imagePromises);
+  if (document.fonts && document.fonts.ready) {
+    await document.fonts.ready;
+  }
+  updateAllSliderValuePositions();
   document.body.classList.add('loaded');
 }
 
