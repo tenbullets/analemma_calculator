@@ -1,12 +1,14 @@
 // --- 1. Constants & Configuration ---
 const CONFIG = {
   SUN_COLOR: '#CACAC7',
-  GRID_COLOR: 'rgba(60, 95, 101, 1)',
+  // GRID_COLOR: 'rgba(60, 95, 101, 1)',
+  GRID_COLOR: '#666666',
   CANVAS_CX: 900,
   CANVAS_CY: 900,
   GRID_RADIUS: 890,
   GRID_LINE_WIDTH: 3,
   SUN_SIZE: 10,
+  SUN_R: 5,
   SUN_OFFSET: 5,
   POSSIBLE_INTERVALS: [
     1, 2, 3, 4, 5, 6, 8, 9, 10, 12, 15, 16, 18, 20,
@@ -399,7 +401,9 @@ function drawAnalemmas() {
         }
 
         if (pos.altitude > 0 && i % state.globalPointStep === 0) {
-          sunsPaths.push(`M ${(pt.x - CONFIG.SUN_OFFSET).toFixed(1)} ${(pt.y - CONFIG.SUN_OFFSET).toFixed(1)} h ${CONFIG.SUN_SIZE} v ${CONFIG.SUN_SIZE} h -${CONFIG.SUN_SIZE} z`);
+          // sunsPaths.push(`M ${(pt.x - CONFIG.SUN_OFFSET).toFixed(1)} ${(pt.y - CONFIG.SUN_OFFSET).toFixed(1)} h ${CONFIG.SUN_SIZE} v ${CONFIG.SUN_SIZE} h -${CONFIG.SUN_SIZE} z`);
+          sunsPaths.push(`M ${(pt.x - CONFIG.SUN_R).toFixed(1)} ${pt.y.toFixed(1)} ` +`a ${CONFIG.SUN_R} ${CONFIG.SUN_R} 0 1 0 ${CONFIG.SUN_SIZE} 0 ` + `a ${CONFIG.SUN_R} ${CONFIG.SUN_R} 0 1 0 -${CONFIG.SUN_SIZE} 0 z`
+          );
         }
       }
     }
