@@ -8,43 +8,48 @@
   <script src="script.js" defer></script>
 </head>
 <body>
-   
-  <img src="img/angels.svg" alt="Angels" class="angels-img">
 
   <div class="map-wrapper">
-    <img src="img/Запад.svg" alt="Запад" class="compass-img compass-west">
-    <img src="img/Север.svg" alt="Север" class="compass-img compass-north">
-    <img src="img/Восток.svg" alt="Восток" class="compass-img compass-east">
-    <img src="img/Юг.svg" alt="Юг" class="compass-img compass-south">
-   
-    <svg id="view-canvas" viewBox="0 0 1800 1800" xmlns="http://www.w3.org/2000/svg">
+    <span class="compass-label compass-west" aria-label="Запад">W</span>
+    <span class="compass-label compass-north" aria-label="Север">N</span>
+    <span class="compass-label compass-east" aria-label="Восток">E</span>
+    <span class="compass-label compass-south" aria-label="Юг">S</span>
+
+    <svg id="view-canvas" viewBox="0 0 1800 1800"
+         xmlns="http://www.w3.org/2000/svg">
       <defs>
         <clipPath id="grid-clip">
           <circle cx="900" cy="900" r="891" />
         </clipPath>
       </defs>
-      
+
       <g id="grid-layer" clip-path="url(#grid-clip)"></g>
-      
+
       <g id="dynamic-layer">
-        <path id="curves-path" fill="none" stroke="#CACAC7" stroke-width="1.5" />
+        <path id="curves-path"
+              fill="none"
+              stroke="#CACAC7"
+              stroke-width="1.5" />
         <g id="suns-layer"></g>
       </g>
     </svg>
   </div>
 
   <div class="ui-wrapper">
+
     <div class="buttons-layer">
       <div class="custom-btn">
         <span id="startDisplay">НАЧАЛО</span>
-        <input id="startDate" type="date" value="" class="hidden-date-input">
+        <input id="startDate" type="date" value=""
+               class="hidden-date-input">
       </div>
-      
+
       <div class="custom-btn">
         <span id="endDisplay">КОНЕЦ</span>
-        <input id="endDate" type="date" value="" class="hidden-date-input">
+        <input id="endDate" type="date" value=""
+               class="hidden-date-input">
       </div>
-      
+
       <div class="custom-btn" id="projBtn">
         <span id="projDisplay">ЭКВАТОРИАЛЬНАЯ СЕТКА</span>
         <input type="hidden" id="projection" value="equatorial">
@@ -52,40 +57,52 @@
     </div>
 
     <div class="sliders-layer">
+
       <div class="slider-row">
         <div class="slider-control">
           <span class="slider-text" id="textLat">ШИРОТА</span>
-          <input id="lat" type="range" min="-90" max="90" step="0.0001" value="-90.00">
+          <input id="lat" type="range"
+                 min="-90" max="90" step="0.0001" value="-90.00">
         </div>
-        <div class="slider-value" id="latVal"><span>-90.00</span></div>
+        <div class="slider-value" id="latVal">
+          <span>-90.00</span>
+        </div>
       </div>
 
       <div class="slider-row">
         <div class="slider-control">
           <span class="slider-text" id="textLon">ДОЛГОТА</span>
-          <input id="lon" type="range" min="-180" max="180" step="0.0001" value="-180.00">
+          <input id="lon" type="range"
+                 min="-180" max="180" step="0.0001" value="-180.00">
         </div>
-        <div class="slider-value" id="lonVal"><span>-180.00</span></div>
+        <div class="slider-value" id="lonVal">
+          <span>-180.00</span>
+        </div>
       </div>
 
       <div class="slider-row">
         <div class="slider-control">
           <span class="slider-text" id="textStep">ШАГ СВЕТИЛ</span>
-          <input id="step" type="range" min="0" max="1" step="0.001" value="0">
+          <input id="step" type="range"
+                 min="0" max="1" step="0.001" value="0">
         </div>
-        <div class="slider-value" id="stepVal"><span></span></div>
+        <div class="slider-value" id="stepVal">
+          <span></span>
+        </div>
       </div>
 
       <div class="slider-row">
         <div class="slider-control">
           <span class="slider-text" id="textInterval">ИНТЕРВАЛ</span>
-          <input id="intervalInput" type="range" min="0.08" max="1" step="0.001" value="0.08">
+          <input id="intervalInput" type="range"
+                 min="0.08" max="1" step="0.001" value="0.08">
         </div>
-        <div class="slider-value" id="intervalVal"><span></span></div>
+        <div class="slider-value" id="intervalVal">
+          <span></span>
+        </div>
       </div>
-    </div>
 
-    <img src="img/portals.svg" alt="Portals" class="portals-img">
+    </div>
   </div>
 
 </body>

@@ -1,26 +1,46 @@
 :root {
   color-scheme: dark;
-  --bg-color: #0b1215;
+
+  --bg-color: #000000;
   --text-color: #cacac7;
-  --font-main: "SF Pro Regular", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --font-main: "SF Pro Display", "SF Pro Text", "SF Pro",
+    -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+
+  --content-width: 620px;
+  --scale: 1.15;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 html {
-  zoom: 0.9;
+  min-height: 100%;
+  background: var(--bg-color);
 }
 
 body {
-  font-family: var(--font-main);
-  font-weight: 400;
-  font-size: 12px;
-  letter-spacing: 0.01em;
-  padding: 40px 0px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
+  min-height: 100vh;
+  min-height: 100svh;
+  width: 100%;
   margin: 0;
+  padding: 30px 20px 36px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+
+  background-color: var(--bg-color);
+  color: var(--text-color);
+
+  font-family: var(--font-main);
+  font-size: calc(12px * var(--scale));
+  font-weight: 400;
+  letter-spacing: 0.01em;
+
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
 }
@@ -36,178 +56,247 @@ img {
   pointer-events: none;
 }
 
-/* Map & Canvas Visuals */
-.angels-img {
-  width: 540px;
-  height: 286px;
-  display: block;
-  margin-bottom: -40px;
-  position: relative;
-  z-index: 2;
-}
+/* MAP AND CANVAS */
 
 .map-wrapper {
   position: relative;
-  width: 540px;
-  height: 280px;
-  margin-bottom: 60px;
+  flex: 0 0 auto;
+
+  width: var(--content-width);
+  height: 420px;
+
+  margin: 0 0 30px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
   z-index: 1;
 }
 
 svg#view-canvas {
   display: block;
-  width: 280px;
-  height: 280px;
+  flex: 0 0 auto;
+
+  width: 322px;
+  height: 322px;
+
   margin: 0;
+
   position: relative;
   z-index: 1;
 }
 
-/* Compass Overlay */
-.compass-img {
+/* CARDINAL DIRECTIONS */
+
+.compass-label {
   position: absolute;
-  width: 160px;
-  height: 39px;
   z-index: 3;
-  display: block;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+  padding: 0;
+
+  color: var(--text-color);
+  font-family: var(--font-main);
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+
+  text-align: center;
+
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
 }
 
-.compass-west {
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-}
+/* NORTH */
 
 .compass-north {
-  height: 51px;
-  left: 190px;
-  top: -39px;
+  top: 9px;
+  left: 50%;
+  transform: translateX(-50%);
 }
+
+/* SOUTH */
 
 .compass-south {
-  left: 190px;
-  bottom: -19.5px;
+  bottom: 9px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.compass-east {
-  left: 380px;
+/* WEST */
+
+.compass-west {
+  left: calc(50% - 201px);
   top: 50%;
   transform: translateY(-50%);
 }
 
-/* UI Controls */
+/* EAST */
+
+.compass-east {
+  left: calc(50% + 175px);
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* UI CONTROLS */
+
 .ui-wrapper {
-  width: 540px;
+  width: var(--content-width);
+  flex: 0 0 auto;
+
   display: flex;
   flex-direction: column;
 }
 
+/* BUTTONS */
+
 .buttons-layer {
   display: flex;
   flex-direction: row;
-  gap: 30px;
-  width: 540px;
+
+  gap: 34.5px;
+  width: 100%;
 }
 
 .custom-btn {
-  width: 160px;
-  height: 24px;
+  width: 184px;
+  min-width: 0;
+  height: 28px;
+
   position: relative;
-  font-size: 12px;
-  line-height: 24px;
+
+  font-size: 13.8px;
+  line-height: 28px;
   letter-spacing: 0.01em;
+  font-weight: 400;
+
   color: var(--text-color);
+
   text-transform: uppercase;
   text-align: left;
   white-space: nowrap;
+
   user-select: none;
   -webkit-user-select: none;
+
   cursor: pointer;
+
   background: transparent;
   border: none;
   padding: 0;
 }
 
+/* DATE INPUTS */
+
 .hidden-date-input {
   position: absolute;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
+
   opacity: 0;
   cursor: pointer;
+
   border: none;
   box-sizing: border-box;
 }
 
 .hidden-date-input::-webkit-calendar-picker-indicator {
   position: absolute;
+
   top: 0;
   left: 0;
+
   width: 100%;
   height: 100%;
+
   opacity: 0;
   cursor: pointer;
 }
 
+/* SLIDERS */
+
 .sliders-layer {
-  margin-top: 14px;
+  margin-top: 16px;
+
   display: flex;
   flex-direction: column;
-  gap: 0px;
-  width: 540px;
-}
 
-.portals-img {
-  width: 540px;
-  height: 103px;
-  display: block;
-  margin-top: 50px;
+  gap: 0;
+  width: 100%;
 }
 
 .slider-row {
   display: flex;
   flex-direction: row;
-  gap: 30px;
-  width: 540px;
+
+  gap: 34.5px;
+  width: 100%;
 }
 
 .slider-control {
-  width: 350px;
-  height: 24px;
+  width: 442px;
+  height: 28px;
+
   position: relative;
+  flex: 0 0 442px;
 }
 
 .slider-text {
   position: absolute;
+
   top: 0;
   left: 0;
-  font-size: 12px;
-  line-height: 24px;
+
+  font-size: 13.8px;
+  line-height: 28px;
   letter-spacing: 0.01em;
+  font-weight: 400;
+
   color: var(--text-color);
+
   text-transform: uppercase;
   pointer-events: none;
   white-space: nowrap;
+
   user-select: none;
   -webkit-user-select: none;
 }
 
+/* RANGE INPUT */
+
 .slider-control input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
+
   width: 100%;
   height: 100%;
+
   margin: 0;
+
   background: transparent;
+
   cursor: ew-resize;
+
   position: absolute;
   top: 0;
   left: 0;
+
   z-index: 2;
+
   touch-action: pan-y;
   outline: none;
 }
@@ -215,36 +304,131 @@ svg#view-canvas {
 .slider-control input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  height: 24px;
-  width: 24px;
+
+  height: 28px;
+  width: 28px;
+
   background: transparent;
   border: none;
 }
 
 .slider-control input[type="range"]::-moz-range-thumb {
-  height: 24px;
-  width: 24px;
+  height: 28px;
+  width: 28px;
+
   background: transparent;
   border: none;
 }
 
+/* SLIDER VALUES */
+
 .slider-value {
   width: 144px;
-  height: 24px;
-  font-size: 12px;
-  line-height: 24px;
+  height: 28px;
+
+  font-size: 13.8px;
+  line-height: 28px;
   letter-spacing: 0.01em;
+  font-weight: 400;
+
   color: var(--text-color);
+
   text-transform: uppercase;
   text-align: left;
+
   user-select: none;
   -webkit-user-select: none;
+
   position: relative;
   overflow: hidden;
+
+  flex: 0 0 144px;
 }
 
 .slider-value span {
   display: inline-block;
   white-space: nowrap;
   will-change: transform;
+}
+
+/* MOBILE ADAPTATION */
+
+@media (max-width: 680px) {
+
+  body {
+    justify-content: flex-start;
+    padding: 24px 16px 32px;
+  }
+
+  .map-wrapper,
+  .ui-wrapper {
+    width: min(100%, 620px);
+  }
+
+  .map-wrapper {
+    height: min(420px, calc(52vw + 80px));
+    margin-bottom: 24px;
+  }
+
+  svg#view-canvas {
+    width: min(322px, 52vw);
+    height: min(322px, 52vw);
+  }
+
+  .compass-north {
+    top: 0;
+  }
+
+  .compass-south {
+    bottom: 0;
+  }
+
+  .compass-west {
+    left: calc(50% - min(201px, 32.4vw));
+  }
+
+  .compass-east {
+    left: calc(50% + min(175px, 28.2vw));
+  }
+
+  .buttons-layer {
+    gap: 12px;
+    justify-content: space-between;
+  }
+
+  .custom-btn {
+    width: auto;
+    flex: 1 1 0;
+    font-size: clamp(10px, 2.1vw, 13.8px);
+  }
+
+  .slider-row {
+    gap: 12px;
+  }
+
+  .slider-control {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .slider-value {
+    flex: 0 0 112px;
+    width: 112px;
+    font-size: clamp(10px, 2.1vw, 13.8px);
+  }
+
+  .slider-text {
+    font-size: clamp(10px, 2.1vw, 13.8px);
+  }
+}
+
+/* SHORT DESKTOP SCREENS */
+
+@media (max-height: 700px) and (min-width: 681px) {
+
+  body {
+    justify-content: flex-start;
+  }
+
 }
